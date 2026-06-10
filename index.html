@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bir Soru Var 🍷</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100dvh;
@@ -21,293 +20,280 @@
       position: relative;
     }
 
-    /* ---- Floating particles background ---- */
+    /* ── Particles ── */
     .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .particle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0;
-      animation: float linear infinite;
+      position: absolute; border-radius: 50%; opacity: 0;
+      animation: floatUp linear infinite;
     }
-    @keyframes float {
+    @keyframes floatUp {
       0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.4; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.3; }
       100% { transform: translateY(-10vh) scale(1); opacity: 0; }
     }
 
-    /* ---- Glow orbs ---- */
+    /* ── Glow orbs ── */
     .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 0;
-      animation: orbPulse 6s ease-in-out infinite alternate;
+      position: fixed; border-radius: 50%; filter: blur(90px);
+      opacity: 0.18; pointer-events: none; z-index: 0;
+      animation: orbPulse 7s ease-in-out infinite alternate;
     }
-    .orb1 { width: 400px; height: 400px; background: #7c3aed; top: -100px; left: -100px; animation-delay: 0s; }
-    .orb2 { width: 350px; height: 350px; background: #db2777; bottom: -80px; right: -80px; animation-delay: 2s; }
-    .orb3 { width: 250px; height: 250px; background: #9333ea; top: 40%; left: 60%; animation-delay: 4s; }
+    .orb1 { width: 420px; height: 420px; background: #7c3aed; top: -120px; left: -120px; }
+    .orb2 { width: 360px; height: 360px; background: #db2777; bottom: -90px; right: -90px; animation-delay: 2.5s; }
+    .orb3 { width: 260px; height: 260px; background: #9333ea; top: 45%; left: 58%; animation-delay: 5s; }
     @keyframes orbPulse {
-      from { transform: scale(1); opacity: 0.15; }
-      to   { transform: scale(1.2); opacity: 0.25; }
+      from { transform: scale(1);   opacity: 0.14; }
+      to   { transform: scale(1.3); opacity: 0.26; }
     }
 
-    /* ---- Card ---- */
+    /* ── Card ── */
     .card {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       width: min(92vw, 460px);
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.09);
       border-radius: 28px;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(22px);
       padding: 2.8rem 2.2rem;
       box-shadow:
         0 0 0 1px rgba(168,85,247,0.12),
-        0 32px 80px rgba(0,0,0,0.5),
+        0 32px 80px rgba(0,0,0,0.55),
         inset 0 1px 0 rgba(255,255,255,0.07);
+      animation: cardEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(40px) scale(0.92); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* ---- Steps ---- */
-    .step {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0;
-    }
+    /* ── Steps ── */
+    .step { display: none; flex-direction: column; align-items: center; text-align: center; gap: 0; }
     .step.active {
       display: flex;
-      animation: stepIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: stepIn 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
-    .step.exit {
-      animation: stepOut 0.3s ease forwards;
-    }
+    .step.exit { animation: stepOut 0.28s ease forwards; }
     @keyframes stepIn {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      from { opacity: 0; transform: translateY(32px) scale(0.94); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes stepOut {
       from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 0; transform: translateY(-22px); }
     }
 
-    /* ---- Progress dots ---- */
-    .progress {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 2.2rem;
-    }
+    /* ── Progress ── */
+    .progress { display: flex; gap: 8px; justify-content: center; margin-bottom: 2.2rem; }
     .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      transition: all 0.4s ease;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.13);
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .dot.active {
-      background: #a855f7;
-      box-shadow: 0 0 10px rgba(168,85,247,0.6);
-      width: 24px;
-      border-radius: 4px;
-    }
-    .dot.done { background: rgba(168,85,247,0.4); }
+    .dot.active { background: #a855f7; box-shadow: 0 0 12px rgba(168,85,247,0.7); width: 26px; border-radius: 4px; }
+    .dot.done   { background: rgba(168,85,247,0.4); }
 
-    /* ---- Emoji ---- */
+    /* ── Emoji ── */
     .emoji {
-      font-size: 3.2rem;
-      margin-bottom: 1.2rem;
-      display: block;
-      animation: emojiBounce 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+      font-size: 3.4rem; margin-bottom: 1.2rem; display: block;
+      animation: emojiBounce 0.65s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
+      position: relative;
     }
     @keyframes emojiBounce {
-      from { transform: scale(0) rotate(-20deg); }
-      to   { transform: scale(1) rotate(0deg); }
+      from { transform: scale(0) rotate(-25deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+    }
+    .emoji-pulse { animation: emojiBounce 0.65s cubic-bezier(0.34,1.56,0.64,1) 0.15s both, emojiPulse 2.5s ease-in-out 1s infinite; }
+    @keyframes emojiPulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.12); }
     }
 
-    /* ---- Title ---- */
+    /* ── Headings ── */
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      line-height: 1.45;
-      color: #fff;
-      margin-bottom: 2rem;
-      letter-spacing: -0.01em;
+      font-size: 1.5rem; font-weight: 700; line-height: 1.45;
+      color: #fff; margin-bottom: 2rem; letter-spacing: -0.01em;
+      animation: fadeSlide 0.5s ease 0.2s both;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---- Buttons ---- */
+    /* ── Buttons ── */
     .btn {
-      padding: 0.9rem 2rem;
-      border-radius: 999px;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
-      position: relative;
-      overflow: hidden;
+      padding: 0.9rem 2rem; border-radius: 999px; border: none;
+      font-size: 1rem; font-weight: 600; font-family: 'Inter', sans-serif;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0);
-      transition: background 0.2s;
-      border-radius: inherit;
-    }
-    .btn:hover::after { background: rgba(255,255,255,0.08); }
     .btn:active { transform: scale(0.95) !important; }
+
+    /* shimmer sweep */
+    .btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transition: left 0s;
+    }
+    .btn:hover::before { left: 150%; transition: left 0.55s ease; }
 
     .btn-primary {
       background: linear-gradient(135deg, #9333ea, #db2777);
-      color: #fff;
+      color: #fff; width: 100%;
       box-shadow: 0 4px 24px rgba(147,51,234,0.4);
-      width: 100%;
+      animation: btnPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.35s both;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(147,51,234,0.55); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(147,51,234,0.55); }
 
     .btn-ghost {
-      background: rgba(255,255,255,0.06);
-      color: #d4b4fe;
-      border: 1px solid rgba(168,85,247,0.25);
-      width: 100%;
+      background: rgba(255,255,255,0.06); color: #d4b4fe;
+      border: 1px solid rgba(168,85,247,0.28); width: 100%;
+      animation: btnPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.45s both;
     }
-    .btn-ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.11); transform: translateY(-2px); }
 
+    @keyframes btnPop {
+      from { opacity: 0; transform: scale(0.88) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ── NO button (escaping) ── */
     .btn-no {
       background: rgba(255,255,255,0.05);
-      color: #666;
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.9rem;
-      padding: 0.7rem 1.6rem;
-      position: fixed;
-      z-index: 100;
-      transition: none !important;
+      color: #555; border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.88rem; padding: 0.65rem 1.5rem;
+      position: fixed; z-index: 100;
+      /* slow smooth escape */
+      transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1);
+      cursor: default;
     }
 
-    /* ---- Button group ---- */
+    /* ── Button group ── */
     .btn-group { display: flex; flex-direction: column; gap: 0.9rem; width: 100%; }
 
-    /* ---- Custom answer reveal ---- */
+    /* ── Reveal box (step 2 "Ben bilirim") ── */
     .reveal-box {
       display: none;
-      background: rgba(168,85,247,0.08);
-      border: 1px solid rgba(168,85,247,0.25);
+      background: rgba(168,85,247,0.07);
+      border: 1px solid rgba(168,85,247,0.22);
       border-radius: 18px;
       padding: 1.3rem 1.4rem;
-      color: #e9d5ff;
-      font-size: 0.95rem;
-      line-height: 1.65;
-      margin-top: 0.5rem;
+      width: 100%; margin-top: 0.5rem;
       animation: stepIn 0.4s ease forwards;
       text-align: left;
     }
     .reveal-box.show { display: block; }
 
-    /* ---- Time picker ---- */
+    .reveal-label {
+      font-size: 0.82rem; color: #a78bfa; margin-bottom: 0.6rem; letter-spacing: 0.03em;
+    }
+    .reveal-input {
+      width: 100%; background: rgba(0,0,0,0.25);
+      border: 1.5px solid rgba(168,85,247,0.3);
+      border-radius: 12px; padding: 0.8rem 1rem;
+      color: #f0e6ff; font-size: 1rem; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 1rem;
+    }
+    .reveal-input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
+    }
+    .reveal-input::placeholder { color: #554466; }
+
+    /* ── Time picker ── */
     .time-picker {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      display: flex; align-items: center; gap: 0.4rem;
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(168,85,247,0.2);
-      border-radius: 20px;
-      padding: 1.2rem 2rem;
+      border: 1px solid rgba(168,85,247,0.22);
+      border-radius: 20px; padding: 1.2rem 2.2rem;
       margin-bottom: 1.8rem;
-      box-shadow: inset 0 2px 12px rgba(0,0,0,0.2);
+      box-shadow: inset 0 2px 14px rgba(0,0,0,0.25);
+      animation: stepIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
     }
     .time-col { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
     .time-val {
       font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      font-weight: 700;
-      color: #d8b4fe;
-      min-width: 3rem;
-      text-align: center;
-      line-height: 1;
+      font-size: 2.8rem; font-weight: 700; color: #d8b4fe;
+      min-width: 3rem; text-align: center; line-height: 1;
+      transition: transform 0.15s, opacity 0.15s;
     }
-    .time-sep { font-size: 2rem; color: #555; line-height: 1; padding-bottom: 4px; }
+    .time-val.bump { animation: numBump 0.2s ease; }
+    @keyframes numBump {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.25); color: #f0abfc; }
+      100% { transform: scale(1); }
+    }
+    .time-sep { font-size: 2rem; color: #444; line-height: 1; padding-bottom: 4px; animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .arrow {
-      background: none;
-      border: none;
-      color: rgba(168,85,247,0.5);
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 0.3rem 0.8rem;
-      border-radius: 10px;
-      transition: color 0.15s, background 0.15s;
-      line-height: 1;
+      background: none; border: none; color: rgba(168,85,247,0.45);
+      font-size: 1.1rem; cursor: pointer; padding: 0.3rem 0.8rem;
+      border-radius: 10px; line-height: 1;
+      transition: color 0.15s, background 0.15s, transform 0.15s;
     }
-    .arrow:hover { color: #a855f7; background: rgba(168,85,247,0.12); }
+    .arrow:hover { color: #a855f7; background: rgba(168,85,247,0.13); transform: scale(1.2); }
+    .arrow:active { transform: scale(0.9); }
 
-    /* ---- Summary ---- */
+    /* ── Summary ── */
     .summary {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 1.4rem;
-      width: 100%;
-      margin-bottom: 1.8rem;
+      border-radius: 18px; padding: 1.4rem; width: 100%; margin-bottom: 1.8rem;
       text-align: left;
+      animation: stepIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
     }
     .summary-row {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      padding: 0.5rem 0;
-      color: #ccc;
-      font-size: 0.95rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.55rem 0; color: #bbb; font-size: 0.95rem;
     }
     .summary-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .summary-row strong { color: #e9d5ff; margin-left: auto; }
+    .summary-row strong { color: #e9d5ff; margin-left: auto; text-align: right; }
 
-    /* ---- Confetti ---- */
-    .confetti-piece {
-      position: fixed;
-      width: 10px; height: 10px;
-      pointer-events: none;
-      z-index: 999;
-      animation: confettiFall linear forwards;
-    }
-    @keyframes confettiFall {
-      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-
-    /* ---- Heart pulse (step4) ---- */
+    /* ── Heart ring ── */
     .heart-ring {
-      position: absolute;
-      inset: -20px;
-      border-radius: 50%;
-      border: 2px solid rgba(219,39,119,0.3);
-      animation: heartRing 2s ease-out infinite;
+      position: absolute; inset: -18px; border-radius: 50%;
+      border: 2px solid rgba(219,39,119,0.35);
+      animation: heartRing 2.2s ease-out infinite;
       pointer-events: none;
     }
     @keyframes heartRing {
-      0%   { transform: scale(0.8); opacity: 0.8; }
-      100% { transform: scale(1.6); opacity: 0; }
+      0%   { transform: scale(0.7); opacity: 0.9; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .heart-ring2 {
+      position: absolute; inset: -18px; border-radius: 50%;
+      border: 2px solid rgba(168,85,247,0.3);
+      animation: heartRing 2.2s ease-out 1.1s infinite;
+      pointer-events: none;
+    }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed; pointer-events: none; z-index: 999;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(800deg) scale(0.5); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-<!-- Background -->
 <div class="particles" id="particles"></div>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
 
-<!-- Escaping NO button (outside card) -->
+<!-- Escaping NO button -->
 <button class="btn btn-no" id="noBtn">Hayır 🙅</button>
 
-<!-- Main card -->
 <div class="card" id="mainCard">
 
-  <!-- Progress -->
   <div class="progress">
     <div class="dot active" id="d1"></div>
     <div class="dot" id="d2"></div>
@@ -333,10 +319,9 @@
       <button class="btn btn-ghost" onclick="showMyAnswer()">Ben bilirim 🗺️</button>
     </div>
     <div class="reveal-box" id="revealBox">
-      <!-- ✏️ Buraya kendi cevabını yaz -->
-      Aklımda harika bir yer var 😌 Sana söylemiyorum, sürpriz olsun. Çok beğeneceksin, söz.
-      <br><br>
-      <button class="btn btn-primary" onclick="pickPlace('surpriz'); goTo(3)" style="margin-top:0.3rem">Tamam, sana güveniyorum 💜</button>
+      <div class="reveal-label">Nereye gitmek istiyorsun?</div>
+      <input class="reveal-input" id="placeInput" type="text" placeholder="Bir yer yaz..." maxlength="60" />
+      <button class="btn btn-primary" onclick="confirmPlace()">Tamam, gidiyoruz 💜</button>
     </div>
   </div>
 
@@ -362,9 +347,10 @@
 
   <!-- Step 4 -->
   <div class="step" id="step4">
-    <span class="emoji" style="position:relative">
+    <span class="emoji emoji-pulse" style="position:relative">
       🎉
       <span class="heart-ring"></span>
+      <span class="heart-ring2"></span>
     </span>
     <h1>Her şey tamamsa başlıyoruz!</h1>
     <div class="summary">
@@ -377,119 +363,124 @@
 </div>
 
 <script>
-  /* ─── State ─── */
+  /* ── State ── */
   let chosenPlace = '';
   let hour = 20, minute = 0;
   let currentStep = 1;
 
-  /* ─── Particles ─── */
-  const particleContainer = document.getElementById('particles');
-  const colors = ['#a855f7','#db2777','#ec4899','#7c3aed','#f472b6','#c084fc'];
-  for (let i = 0; i < 30; i++) {
+  /* ── Particles ── */
+  const colors = ['#a855f7','#db2777','#ec4899','#7c3aed','#f472b6','#c084fc','#e879f9'];
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 35; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    const size = Math.random() * 5 + 3;
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      left:${Math.random()*100}%;
-      animation-duration:${Math.random()*12+8}s;
-      animation-delay:${Math.random()*10}s;
-    `;
-    particleContainer.appendChild(p);
+    const s = Math.random() * 5 + 3;
+    p.style.cssText = `width:${s}px;height:${s}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;animation-duration:${Math.random()*14+9}s;animation-delay:${Math.random()*12}s;`;
+    pc.appendChild(p);
   }
 
-  /* ─── Navigation ─── */
+  /* ── Navigation ── */
   function goTo(n) {
     const cur = document.getElementById('step' + currentStep);
     cur.classList.add('exit');
     setTimeout(() => {
-      cur.classList.remove('active', 'exit');
+      cur.classList.remove('active','exit');
       currentStep = n;
       const next = document.getElementById('step' + n);
       next.classList.add('active');
       updateDots(n);
-    }, 280);
+    }, 270);
   }
 
   function updateDots(n) {
     for (let i = 1; i <= 4; i++) {
       const d = document.getElementById('d' + i);
-      d.className = 'dot' + (i === n ? ' active' : i < n ? ' done' : '');
+      d.className = 'dot' + (i===n?' active':i<n?' done':'');
     }
   }
 
-  /* ─── NO button escape ─── */
+  /* ── NO button — slow escape ── */
   const noBtn = document.getElementById('noBtn');
-  let noBtnPlaced = false;
 
   function placeNoBtn() {
-    const w = window.innerWidth, h = window.innerHeight;
-    const bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 44;
-    const pad = 20;
-    const x = Math.random() * (w - bw - pad*2) + pad;
-    const y = Math.random() * (h - bh - pad*2) + pad;
+    const pad = 24;
+    const bw = noBtn.offsetWidth || 110, bh = noBtn.offsetHeight || 46;
+    const x = Math.random() * (window.innerWidth  - bw - pad*2) + pad;
+    const y = Math.random() * (window.innerHeight - bh - pad*2) + pad;
     noBtn.style.left = x + 'px';
     noBtn.style.top  = y + 'px';
-    noBtnPlaced = true;
   }
 
   window.addEventListener('load', () => {
-    // Initial position: below the card
-    noBtn.style.left = (window.innerWidth * 0.6) + 'px';
-    noBtn.style.top  = (window.innerHeight * 0.72) + 'px';
+    noBtn.style.left = (window.innerWidth * 0.62) + 'px';
+    noBtn.style.top  = (window.innerHeight * 0.74) + 'px';
   });
 
   noBtn.addEventListener('mouseenter', placeNoBtn);
-
-  noBtn.addEventListener('touchstart', (e) => {
+  noBtn.addEventListener('touchstart', e => {
     e.preventDefault();
     placeNoBtn();
   }, { passive: false });
 
-  // Hide no button after step 1
-  function hideNoBtn() { noBtn.style.display = 'none'; }
-
-  /* ─── Step 2 ─── */
+  /* ── Step 2 ── */
   function pickPlace(type) {
-    chosenPlace = type === 'sen' ? 'Sen bilirsin ✨' : 'Sürpriz 🗺️';
+    chosenPlace = type === 'sen' ? 'Sen bilirsin ✨' : '';
     hideNoBtn();
   }
 
   function showMyAnswer() {
+    hideNoBtn();
     document.getElementById('s2btns').style.display = 'none';
     const box = document.getElementById('revealBox');
     box.classList.add('show');
+    setTimeout(() => document.getElementById('placeInput').focus(), 300);
   }
 
-  /* ─── Step 3: Time picker ─── */
+  function confirmPlace() {
+    const val = document.getElementById('placeInput').value.trim();
+    if (!val) {
+      document.getElementById('placeInput').style.borderColor = '#db2777';
+      document.getElementById('placeInput').placeholder = 'Bir yer yazmadan geçemezsin 😄';
+      return;
+    }
+    chosenPlace = val + ' 🗺️';
+    goTo(3);
+  }
+
+  function hideNoBtn() { noBtn.style.display = 'none'; }
+
+  /* ── Step 3: Time ── */
   function changeTime(unit, delta) {
     if (unit === 'h') {
       hour = (hour + delta + 24) % 24;
-      document.getElementById('hDisp').textContent = String(hour).padStart(2,'0');
+      const el = document.getElementById('hDisp');
+      el.textContent = String(hour).padStart(2,'0');
+      bump(el);
     } else {
       minute = (minute + delta + 60) % 60;
-      document.getElementById('mDisp').textContent = String(minute).padStart(2,'0');
+      const el = document.getElementById('mDisp');
+      el.textContent = String(minute).padStart(2,'0');
+      bump(el);
     }
   }
 
-  // Swipe/drag on time columns
-  let touchStartY = null, touchUnit = null;
+  function bump(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+
+  // Swipe on time columns
+  let ty = null, tu = null;
   document.querySelectorAll('.time-col').forEach((col, i) => {
     const unit = i === 0 ? 'h' : 'm';
-    col.addEventListener('touchstart', e => {
-      touchStartY = e.touches[0].clientY;
-      touchUnit = unit;
+    col.addEventListener('touchstart', e => { ty = e.touches[0].clientY; tu = unit; }, { passive: true });
+    col.addEventListener('touchmove',  e => {
+      if (ty === null) return;
+      const dy = ty - e.touches[0].clientY;
+      if (Math.abs(dy) > 18) { changeTime(tu, dy > 0 ? 1 : -1); ty = e.touches[0].clientY; }
     }, { passive: true });
-    col.addEventListener('touchmove', e => {
-      if (touchStartY === null) return;
-      const dy = touchStartY - e.touches[0].clientY;
-      if (Math.abs(dy) > 20) {
-        changeTime(touchUnit, dy > 0 ? 1 : -1);
-        touchStartY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-    col.addEventListener('touchend', () => { touchStartY = null; });
+    col.addEventListener('touchend', () => { ty = null; });
   });
 
   function confirmTime() {
@@ -497,10 +488,10 @@
     document.getElementById('sumPlace').textContent = chosenPlace || 'Sen bilirsin ✨';
     document.getElementById('sumTime').textContent  = t;
     goTo(4);
-    setTimeout(launchConfetti, 400);
+    setTimeout(launchConfetti, 450);
   }
 
-  /* ─── Step 4: Finish ─── */
+  /* ── Step 4 ── */
   function finish() {
     document.querySelector('#step4 h1').textContent = 'Harika! Görüşürüz o zaman 🥂';
     document.querySelector('#step4 .emoji').textContent = '💜';
@@ -508,23 +499,18 @@
     launchConfetti();
   }
 
-  /* ─── Confetti ─── */
+  /* ── Confetti ── */
+  const shapes = ['❤️','✨','🌸','💜','🎊','🍷','🌟','💫'];
   function launchConfetti() {
-    const shapes = ['❤️','✨','🌸','💜','🎊','🍷'];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 50; i++) {
       setTimeout(() => {
         const el = document.createElement('div');
         el.className = 'confetti-piece';
-        el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
-        el.style.cssText = `
-          left: ${Math.random()*100}vw;
-          font-size: ${Math.random()*18+12}px;
-          animation-duration: ${Math.random()*1.5+1.5}s;
-          animation-delay: 0s;
-        `;
+        el.textContent = shapes[Math.floor(Math.random()*shapes.length)];
+        el.style.cssText = `left:${Math.random()*100}vw;font-size:${Math.random()*20+12}px;animation-duration:${Math.random()*1.8+1.8}s;`;
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3500);
-      }, i * 60);
+        setTimeout(() => el.remove(), 4000);
+      }, i * 55);
     }
   }
 </script>
