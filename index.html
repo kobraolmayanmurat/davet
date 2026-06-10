@@ -279,7 +279,7 @@
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
     #introScreen.hide {
-      opacity: 0; transform: scale(1.08); pointer-events: none;
+      opacity: 0; transform: scale(1.08); pointer-events: none; visibility: hidden;
     }
 
     .davet-text {
@@ -353,6 +353,7 @@
       transform-origin: top center;
       transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
       z-index: 3;
+      pointer-events: none;
     }
     .envelope-wrap.open .env-flap {
       transform: rotateX(180deg);
