@@ -357,6 +357,37 @@
       100% { transform: translateY(-300px) rotate(25deg) scale(0.7); opacity: 0; }
     }
 
+    /* ── Dancer ── */
+    #dancerWrap {
+      position: relative;
+      width: 120px; height: 120px;
+      margin-bottom: 1rem;
+    }
+    #dancer {
+      font-size: 5rem;
+      line-height: 1;
+      display: block;
+      animation: dance 0.5s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+      filter: drop-shadow(0 8px 24px rgba(168,85,247,0.5));
+    }
+    @keyframes dance {
+      0%   { transform: rotate(-18deg) translateY(0px) scaleX(1); }
+      25%  { transform: rotate(0deg)   translateY(-12px) scaleX(0.95); }
+      50%  { transform: rotate(18deg)  translateY(0px) scaleX(1); }
+      75%  { transform: rotate(0deg)   translateY(-8px) scaleX(1.05); }
+      100% { transform: rotate(-18deg) translateY(0px) scaleX(1); }
+    }
+    #dancer.celebrate {
+      animation: celebrate 0.4s ease-in-out infinite alternate;
+      font-size: 5.5rem;
+    }
+    @keyframes celebrate {
+      0%   { transform: rotate(-25deg) translateY(-5px) scale(1.1); }
+      50%  { transform: rotate(25deg)  translateY(-20px) scale(1.2); }
+      100% { transform: rotate(-25deg) translateY(-5px) scale(1.1); }
+    }
+
     /* ── Confetti ── */
     .confetti-piece {
       position: fixed; pointer-events: none; z-index: 999;
@@ -463,18 +494,12 @@
 
   <!-- Step 5 -->
   <div class="step" id="step5">
-    <span class="emoji emoji-pulse" style="position:relative">
-      🎉
-      <span class="heart-ring"></span>
-      <span class="heart-ring2"></span>
-    </span>
-    <h1>Her şey tamamsa başlıyoruz!</h1>
-    <div class="summary">
-      <div class="summary-row">📍 Yer <strong id="sumPlace">—</strong></div>
-      <div class="summary-row">🍸 Tercih <strong id="sumDrink">—</strong></div>
-      <div class="summary-row">🕐 Saat <strong id="sumTime">—</strong></div>
+    <div id="dancerWrap">
+      <div id="dancer">🦊</div>
     </div>
+    <h1 id="finalTitle">Her şey tamamsa başlıyoruz!</h1>
     <button class="btn btn-primary" id="finishBtn" onclick="finish()">Hazırım! 🥂</button>
+    <p id="finalMsg" style="display:none;font-family:'Playfair Display',serif;font-size:1.6rem;color:#e9d5ff;margin-top:1rem;">Görüşürüz! 🥂</p>
   </div>
 
 </div>
@@ -677,9 +702,10 @@
 
   /* ── Step 5 ── */
   function finish() {
-    document.querySelector('#step5 h1').textContent = 'Harika! Görüşürüz o zaman 🥂';
-    document.querySelector('#step5 .emoji').textContent = '💜';
     document.getElementById('finishBtn').style.display = 'none';
+    document.getElementById('finalTitle').style.display = 'none';
+    document.getElementById('dancer').classList.add('celebrate');
+    document.getElementById('finalMsg').style.display = 'block';
     saveToSupabase();
     launchConfetti();
   }
