@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Bir Soru Var 🍷</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -295,47 +298,63 @@
     }
 
     /* ── Envelope ── */
+    #envWrap {
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
     #envBtn {
       position: relative;
       width: 220px; height: 150px;
-      cursor: pointer;
       background: none; border: none; padding: 0;
       animation: envFloat 3s ease-in-out infinite;
       filter: drop-shadow(0 16px 36px rgba(147,51,234,0.45));
+      transition: transform 0.4s ease;
+      cursor: pointer;
     }
     #envBtn:hover { filter: drop-shadow(0 22px 48px rgba(219,39,119,0.6)); }
+    #envBtn.open { animation: none; transform: translateY(10px) scale(0.95); }
+
     @keyframes envFloat {
       0%,100% { transform: translateY(0px) rotate(-1deg); }
       50%      { transform: translateY(-14px) rotate(1deg); }
     }
 
-    /* SVG envelope — no invisible hit areas */
     #envBtn svg { width: 100%; height: 100%; overflow: visible; }
 
-    /* flap open */
+    /* flap opens upward */
     #envFlap {
-      transform-origin: 110px 0px;
+      transform-origin: 110px 30px;
       transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
     }
-    #envBtn.open #envFlap { transform: rotateX(170deg); }
+    #envBtn.open #envFlap { transform: rotateX(-170deg); }
 
-    /* letter rises */
+    /* letter: starts hidden inside, rises and spins away */
     #envCard {
       position: absolute;
-      left: 20px; right: 20px;
-      bottom: 18px; height: 100px;
+      left: 22px; right: 22px;
+      bottom: 14px; height: 95px;
       background: linear-gradient(135deg, #f5e6ff, #ffe4f0);
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       pointer-events: none;
-      transform: translateY(0px) rotate(0deg);
-      transition: transform 0.7s cubic-bezier(0.34,1.4,0.64,1) 0.25s;
       z-index: 1;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: none;
     }
     #envBtn.open #envCard {
-      transform: translateY(-160px) rotate(6deg) scale(1.08);
+      animation: letterFly 1.1s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
+    }
+    @keyframes letterFly {
+      0%   { transform: translateY(20px) rotate(0deg) scale(0.9); opacity: 0; }
+      30%  { transform: translateY(-80px) rotate(-4deg) scale(1.05); opacity: 1; }
+      60%  { transform: translateY(-140px) rotate(8deg) scale(1.1); opacity: 1; }
+      100% { transform: translateY(-300px) rotate(25deg) scale(0.7); opacity: 0; }
     }
 
     /* ── Confetti ── */
@@ -358,25 +377,20 @@
 
 <!-- Intro -->
 <div id="introScreen">
-  <button id="envBtn" onclick="openEnvelope()">
-    <!-- letter card (rises out) -->
-    <div id="envCard">💌</div>
-    <!-- SVG envelope drawn on top -->
-    <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
-      <!-- body -->
-      <rect x="0" y="30" width="220" height="120" rx="10" fill="#2d1b4e" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
-      <!-- bottom triangle fold -->
-      <polygon points="0,150 110,85 220,150" fill="#1e0f38"/>
-      <!-- left diagonal -->
-      <polygon points="0,30 0,150 90,95" fill="#251445"/>
-      <!-- right diagonal -->
-      <polygon points="220,30 220,150 130,95" fill="#251445"/>
-      <!-- top flap -->
-      <polygon id="envFlap" points="0,30 220,30 110,105" fill="#3b1163" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
-    </svg>
-  </button>
-  <div class="davet-text">DAVETİN VAR!</div>
-  <div class="davet-sub">zarfa tıkla 💜</div>
+  <div id="envWrap" onclick="openEnvelope()">
+    <button id="envBtn">
+      <div id="envCard">💌</div>
+      <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="30" width="220" height="120" rx="10" fill="#2d1b4e" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+        <polygon points="0,150 110,85 220,150" fill="#1e0f38"/>
+        <polygon points="0,30 0,150 90,95" fill="#251445"/>
+        <polygon points="220,30 220,150 130,95" fill="#251445"/>
+        <polygon id="envFlap" points="0,30 220,30 110,105" fill="#3b1163" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
+      </svg>
+    </button>
+    <div class="davet-text">DAVETİN VAR!</div>
+    <div class="davet-sub">zarfa tıkla 💜</div>
+  </div>
 </div>
 
 <div class="card" id="mainCard">
@@ -468,7 +482,7 @@
     btn.classList.add('open');
     setTimeout(() => {
       document.getElementById('introScreen').classList.add('hide');
-    }, 1200);
+    }, 1500);
   }
 
   /* ── Init time display ── */
