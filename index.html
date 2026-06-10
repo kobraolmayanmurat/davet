@@ -400,6 +400,7 @@
     <div class="dot" id="d2"></div>
     <div class="dot" id="d3"></div>
     <div class="dot" id="d4"></div>
+    <div class="dot" id="d5"></div>
   </div>
 
   <!-- Step 1 -->
@@ -431,6 +432,17 @@
 
   <!-- Step 3 -->
   <div class="step" id="step3">
+    <span class="emoji">🍸</span>
+    <h1>Ne tercih edersin?</h1>
+    <div class="reveal-box show" style="margin-bottom:1rem;">
+      <div class="reveal-label">İçeceğini yaz</div>
+      <input class="reveal-input" id="drinkInput" type="text" placeholder="Bir şeyler yaz..." maxlength="80" />
+    </div>
+    <button class="btn btn-primary" onclick="confirmDrink()">Güzel seçim 🥂</button>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step" id="step4">
     <span class="emoji">🕐</span>
     <h1>Seni saat kaçta alayım?</h1>
     <div class="time-picker">
@@ -449,8 +461,8 @@
     <button class="btn btn-primary" onclick="confirmTime()">Bu saatte hazır olacağım 🚗</button>
   </div>
 
-  <!-- Step 4 -->
-  <div class="step" id="step4">
+  <!-- Step 5 -->
+  <div class="step" id="step5">
     <span class="emoji emoji-pulse" style="position:relative">
       🎉
       <span class="heart-ring"></span>
@@ -459,6 +471,7 @@
     <h1>Her şey tamamsa başlıyoruz!</h1>
     <div class="summary">
       <div class="summary-row">📍 Yer <strong id="sumPlace">—</strong></div>
+      <div class="summary-row">🍸 Tercih <strong id="sumDrink">—</strong></div>
       <div class="summary-row">🕐 Saat <strong id="sumTime">—</strong></div>
     </div>
     <button class="btn btn-primary" id="finishBtn" onclick="finish()">Hazırım! 🥂</button>
@@ -514,7 +527,7 @@
   }
 
   function updateDots(n) {
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
       const d = document.getElementById('d' + i);
       d.className = 'dot' + (i===n?' active':i<n?' done':'');
     }
@@ -583,7 +596,20 @@
     noBtn.style.display = 'none';
   }
 
-  /* ── Step 3: Time ── */
+  /* ── Step 3: Drink ── */
+  let chosenDrink = '';
+  function confirmDrink() {
+    const val = document.getElementById('drinkInput').value.trim();
+    if (!val) {
+      document.getElementById('drinkInput').style.borderColor = '#db2777';
+      document.getElementById('drinkInput').placeholder = 'Bir şey yazmadan geçemezsin 😄';
+      return;
+    }
+    chosenDrink = val;
+    goTo(4);
+  }
+
+  /* ── Step 4: Time ── */
   function changeTime(unit, delta) {
     if (unit === 'h') {
       const next = (hour + delta + 24) % 24;
@@ -627,8 +653,9 @@
   function confirmTime() {
     const t = `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
     document.getElementById('sumPlace').textContent = chosenPlace || 'Sen bilirsin ✨';
+    document.getElementById('sumDrink').textContent = chosenDrink || '—';
     document.getElementById('sumTime').textContent  = t;
-    goTo(4);
+    goTo(5);
     setTimeout(launchConfetti, 450);
   }
 
@@ -641,16 +668,17 @@
   async function saveToSupabase() {
     const { error } = await _sb.from('cevaplar').insert({
       yer: chosenPlace || 'Sen bilirsin ✨',
+      tercih: chosenDrink || '',
       saat: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`,
       tarih: new Date().toISOString()
     });
     if (error) console.error('Kayıt hatası:', error.message);
   }
 
-  /* ── Step 4 ── */
+  /* ── Step 5 ── */
   function finish() {
-    document.querySelector('#step4 h1').textContent = 'Harika! Görüşürüz o zaman 🥂';
-    document.querySelector('#step4 .emoji').textContent = '💜';
+    document.querySelector('#step5 h1').textContent = 'Harika! Görüşürüz o zaman 🥂';
+    document.querySelector('#step5 .emoji').textContent = '💜';
     document.getElementById('finishBtn').style.display = 'none';
     saveToSupabase();
     launchConfetti();
