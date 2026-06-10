@@ -271,108 +271,72 @@
     }
 
     /* ── Intro screen ── */
+    /* ── Intro ── */
     #introScreen {
       position: fixed; inset: 0; z-index: 200;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       background: #0d0a14;
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
     #introScreen.hide {
-      opacity: 0; transform: scale(1.08); pointer-events: none; visibility: hidden;
+      opacity: 0; visibility: hidden; pointer-events: none;
     }
 
     .davet-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1.8rem; font-weight: 700;
-      color: #fff; letter-spacing: 0.08em;
-      margin-top: 2rem;
-      animation: fadeSlide 0.8s ease 0.4s both;
-      text-align: center;
+      font-size: 1.9rem; font-weight: 700;
+      color: #fff; letter-spacing: 0.1em;
+      margin-top: 2.2rem;
+      animation: fadeSlide 0.8s ease 0.5s both;
     }
     .davet-sub {
-      font-size: 0.85rem; color: #a78bfa; margin-top: 0.5rem;
-      animation: fadeSlide 0.8s ease 0.7s both;
+      font-size: 0.85rem; color: #a78bfa; margin-top: 0.6rem;
+      animation: fadeSlide 0.8s ease 0.9s both;
     }
 
     /* ── Envelope ── */
-    .envelope-wrap {
-      position: relative; cursor: pointer;
-      width: 200px; height: 140px;
+    #envBtn {
+      position: relative;
+      width: 220px; height: 150px;
+      cursor: pointer;
+      background: none; border: none; padding: 0;
       animation: envFloat 3s ease-in-out infinite;
-      filter: drop-shadow(0 20px 40px rgba(147,51,234,0.4));
+      filter: drop-shadow(0 16px 36px rgba(147,51,234,0.45));
     }
-    .envelope-wrap:hover { filter: drop-shadow(0 24px 50px rgba(219,39,119,0.55)); }
+    #envBtn:hover { filter: drop-shadow(0 22px 48px rgba(219,39,119,0.6)); }
     @keyframes envFloat {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-12px); }
+      0%,100% { transform: translateY(0px) rotate(-1deg); }
+      50%      { transform: translateY(-14px) rotate(1deg); }
     }
 
-    /* envelope body */
-    .env-body {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 120px;
-      background: linear-gradient(160deg, #2d1b4e, #1a0f2e);
-      border-radius: 4px 4px 12px 12px;
-      border: 1px solid rgba(168,85,247,0.3);
-      overflow: hidden;
-    }
-    /* left & right flaps (decorative) */
-    .env-body::before, .env-body::after {
-      content: ''; position: absolute; bottom: 0;
-      width: 0; height: 0;
-    }
-    .env-body::before {
-      left: 0;
-      border-style: solid;
-      border-width: 0 0 120px 100px;
-      border-color: transparent transparent rgba(59,17,99,0.6) transparent;
-    }
-    .env-body::after {
-      right: 0;
-      border-style: solid;
-      border-width: 120px 0 0 100px;
-      border-color: transparent transparent transparent rgba(59,17,99,0.6);
-    }
+    /* SVG envelope — no invisible hit areas */
+    #envBtn svg { width: 100%; height: 100%; overflow: visible; }
 
-    /* bottom V fold */
-    .env-vfold {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 0; border-left: 100px solid transparent;
-      border-right: 100px solid transparent;
-      border-bottom: 68px solid rgba(80,30,130,0.5);
-    }
-
-    /* top flap */
-    .env-flap {
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 0;
-      border-left: 100px solid transparent;
-      border-right: 100px solid transparent;
-      border-top: 75px solid #3b1163;
-      transform-origin: top center;
+    /* flap open */
+    #envFlap {
+      transform-origin: 110px 0px;
       transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-      z-index: 3;
-      pointer-events: none;
     }
-    .envelope-wrap.open .env-flap {
-      transform: rotateX(180deg);
-    }
+    #envBtn.open #envFlap { transform: rotateX(170deg); }
 
-    /* letter inside */
-    .env-letter {
-      position: absolute; left: 20px; right: 20px;
-      bottom: 10px; height: 90px;
+    /* letter rises */
+    #envCard {
+      position: absolute;
+      left: 20px; right: 20px;
+      bottom: 18px; height: 100px;
       background: linear-gradient(135deg, #f5e6ff, #ffe4f0);
-      border-radius: 6px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s, opacity 0.4s ease 0.3s;
-      z-index: 2;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      pointer-events: none;
+      transform: translateY(0px) rotate(0deg);
+      transition: transform 0.7s cubic-bezier(0.34,1.4,0.64,1) 0.25s;
+      z-index: 1;
     }
-    .envelope-wrap.open .env-letter {
-      transform: translateY(-110px);
+    #envBtn.open #envCard {
+      transform: translateY(-160px) rotate(6deg) scale(1.08);
     }
 
     /* ── Confetti ── */
@@ -395,13 +359,23 @@
 
 <!-- Intro -->
 <div id="introScreen">
-  <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
-    <div class="env-letter">💌</div>
-    <div class="env-body">
-      <div class="env-vfold"></div>
-    </div>
-    <div class="env-flap"></div>
-  </div>
+  <button id="envBtn" onclick="openEnvelope()">
+    <!-- letter card (rises out) -->
+    <div id="envCard">💌</div>
+    <!-- SVG envelope drawn on top -->
+    <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <rect x="0" y="30" width="220" height="120" rx="10" fill="#2d1b4e" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+      <!-- bottom triangle fold -->
+      <polygon points="0,150 110,85 220,150" fill="#1e0f38"/>
+      <!-- left diagonal -->
+      <polygon points="0,30 0,150 90,95" fill="#251445"/>
+      <!-- right diagonal -->
+      <polygon points="220,30 220,150 130,95" fill="#251445"/>
+      <!-- top flap -->
+      <polygon id="envFlap" points="0,30 220,30 110,105" fill="#3b1163" stroke="rgba(168,85,247,0.3)" stroke-width="1"/>
+    </svg>
+  </button>
   <div class="davet-text">DAVETİN VAR!</div>
   <div class="davet-sub">zarfa tıkla 💜</div>
 </div>
@@ -488,12 +462,12 @@
   /* ── Particles ── */
   /* ── Intro / envelope ── */
   function openEnvelope() {
-    const env = document.getElementById('envelope');
-    if (env.classList.contains('open')) return;
-    env.classList.add('open');
+    const btn = document.getElementById('envBtn');
+    if (btn.classList.contains('open')) return;
+    btn.classList.add('open');
     setTimeout(() => {
       document.getElementById('introScreen').classList.add('hide');
-    }, 1000);
+    }, 1200);
   }
 
   /* ── Init time display ── */
