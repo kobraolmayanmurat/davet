@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bir Soru Var 🍷</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -505,27 +506,18 @@
   }
 
   /* ── Supabase ── */
-  const SUPABASE_URL = 'https://ezkhyjbkbppzqsmoxnwj.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_9nx8LuAB5m5INNhuSmy5-g_3XtxaINK';
+  const _sb = supabase.createClient(
+    'https://ezkhyjbkbppzqsmoxnwj.supabase.co',
+    'sb_publishable_9nx8LuAB5m5INNhuSmy5-g_3XtxaINK'
+  );
 
   async function saveToSupabase() {
-    try {
-      await fetch(`${SUPABASE_URL}/rest/v1/cevaplar`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`
-        },
-        body: JSON.stringify({
-          yer: chosenPlace || 'Sen bilirsin ✨',
-          saat: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`,
-          tarih: new Date().toISOString()
-        })
-      });
-    } catch(e) {
-      console.error('Kayıt hatası:', e);
-    }
+    const { error } = await _sb.from('cevaplar').insert({
+      yer: chosenPlace || 'Sen bilirsin ✨',
+      saat: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`,
+      tarih: new Date().toISOString()
+    });
+    if (error) console.error('Kayıt hatası:', error.message);
   }
 
   /* ── Step 4 ── */
