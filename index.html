@@ -164,11 +164,11 @@
     /* ── NO button (escaping) ── */
     .btn-no {
       background: rgba(255,255,255,0.05);
-      color: #555; border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.88rem; padding: 0.65rem 1.5rem;
+      color: #888; border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
       position: fixed; z-index: 100;
-      /* slow smooth escape */
-      transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1);
+      opacity: 1;
+      transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1), opacity 0.3s;
       cursor: default;
     }
 
@@ -290,9 +290,6 @@
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
 
-<!-- Escaping NO button -->
-<button class="btn btn-no" id="noBtn">Hayır 🙅</button>
-
 <div class="card" id="mainCard">
 
   <div class="progress">
@@ -306,8 +303,9 @@
   <div class="step active" id="step1">
     <span class="emoji">🍷</span>
     <h1>Alkol içmeye gelir misin?</h1>
-    <div class="btn-group">
+    <div class="btn-group" id="step1Btns">
       <button class="btn btn-primary" onclick="hideNoBtn(); goTo(2)">Evet, tabii ki 🙌</button>
+      <button class="btn btn-no" id="noBtn">Hayır 🙅</button>
     </div>
   </div>
 
@@ -407,10 +405,27 @@
     }
   }
 
-  /* ── NO button — slow escape ── */
+  /* ── NO button — starts in card, escapes on hover ── */
   const noBtn = document.getElementById('noBtn');
+  let escaped = false;
 
-  function placeNoBtn() {
+  function escapeNoBtn() {
+    if (escaped) { randomPlace(); return; }
+    escaped = true;
+    // snapshot current position
+    const rect = noBtn.getBoundingClientRect();
+    // detach from flow, pin to exact same spot
+    noBtn.style.width  = rect.width + 'px';
+    noBtn.style.left   = rect.left + 'px';
+    noBtn.style.top    = rect.top  + 'px';
+    noBtn.style.position = 'fixed';
+    // remove from btn-group flow
+    document.body.appendChild(noBtn);
+    // next frame: animate to random spot
+    requestAnimationFrame(() => requestAnimationFrame(randomPlace));
+  }
+
+  function randomPlace() {
     const pad = 24;
     const bw = noBtn.offsetWidth || 110, bh = noBtn.offsetHeight || 46;
     const x = Math.random() * (window.innerWidth  - bw - pad*2) + pad;
@@ -419,15 +434,10 @@
     noBtn.style.top  = y + 'px';
   }
 
-  window.addEventListener('load', () => {
-    noBtn.style.left = (window.innerWidth * 0.62) + 'px';
-    noBtn.style.top  = (window.innerHeight * 0.74) + 'px';
-  });
-
-  noBtn.addEventListener('mouseenter', placeNoBtn);
+  noBtn.addEventListener('mouseenter', escapeNoBtn);
   noBtn.addEventListener('touchstart', e => {
     e.preventDefault();
-    placeNoBtn();
+    escapeNoBtn();
   }, { passive: false });
 
   /* ── Step 2 ── */
