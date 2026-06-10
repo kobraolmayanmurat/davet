@@ -676,10 +676,6 @@
   });
 
   function confirmTime() {
-    const t = `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;
-    document.getElementById('sumPlace').textContent = chosenPlace || 'Sen bilirsin ✨';
-    document.getElementById('sumDrink').textContent = chosenDrink || '—';
-    document.getElementById('sumTime').textContent  = t;
     goTo(5);
     setTimeout(launchConfetti, 450);
   }
