@@ -166,10 +166,11 @@
       background: rgba(255,255,255,0.05);
       color: #888; border: 1px solid rgba(255,255,255,0.1);
       width: 100%;
-      position: fixed; z-index: 100;
-      opacity: 1;
-      transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1), opacity 0.3s;
       cursor: default;
+    }
+    .btn-no.floating {
+      position: fixed; z-index: 100;
+      transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1), opacity 0.3s;
     }
 
     /* ── Button group ── */
@@ -412,22 +413,20 @@
   function escapeNoBtn() {
     if (escaped) { randomPlace(); return; }
     escaped = true;
-    // snapshot current position
     const rect = noBtn.getBoundingClientRect();
-    // detach from flow, pin to exact same spot
-    noBtn.style.width  = rect.width + 'px';
-    noBtn.style.left   = rect.left + 'px';
-    noBtn.style.top    = rect.top  + 'px';
-    noBtn.style.position = 'fixed';
-    // remove from btn-group flow
+    // pin to current visual position before detaching
+    noBtn.style.width  = rect.width  + 'px';
+    noBtn.style.left   = rect.left   + 'px';
+    noBtn.style.top    = rect.top    + 'px';
+    noBtn.classList.add('floating');
     document.body.appendChild(noBtn);
-    // next frame: animate to random spot
+    // wait 2 frames so transition picks up from pinned position
     requestAnimationFrame(() => requestAnimationFrame(randomPlace));
   }
 
   function randomPlace() {
     const pad = 24;
-    const bw = noBtn.offsetWidth || 110, bh = noBtn.offsetHeight || 46;
+    const bw = noBtn.offsetWidth, bh = noBtn.offsetHeight;
     const x = Math.random() * (window.innerWidth  - bw - pad*2) + pad;
     const y = Math.random() * (window.innerHeight - bh - pad*2) + pad;
     noBtn.style.left = x + 'px';
