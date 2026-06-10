@@ -332,13 +332,13 @@
     <div class="time-picker">
       <div class="time-col">
         <button class="arrow" onclick="changeTime('h',1)">▲</button>
-        <div class="time-val" id="hDisp">20</div>
+        <div class="time-val" id="hDisp">--</div>
         <button class="arrow" onclick="changeTime('h',-1)">▼</button>
       </div>
       <div class="time-sep">:</div>
       <div class="time-col">
         <button class="arrow" onclick="changeTime('m',1)">▲</button>
-        <div class="time-val" id="mDisp">00</div>
+        <div class="time-val" id="mDisp">--</div>
         <button class="arrow" onclick="changeTime('m',-1)">▼</button>
       </div>
     </div>
@@ -365,10 +365,16 @@
 <script>
   /* ── State ── */
   let chosenPlace = '';
-  let hour = 20, minute = 0;
+  const now = new Date();
+  let hour = now.getHours(), minute = now.getMinutes();
+  let minHour = now.getHours(), minMinute = now.getMinutes();
   let currentStep = 1;
 
   /* ── Particles ── */
+  /* ── Init time display ── */
+  document.getElementById('hDisp').textContent = String(hour).padStart(2,'0');
+  document.getElementById('mDisp').textContent = String(minute).padStart(2,'0');
+
   const colors = ['#a855f7','#db2777','#ec4899','#7c3aed','#f472b6','#c084fc','#e879f9'];
   const pc = document.getElementById('particles');
   for (let i = 0; i < 35; i++) {
@@ -452,12 +458,19 @@
   /* ── Step 3: Time ── */
   function changeTime(unit, delta) {
     if (unit === 'h') {
-      hour = (hour + delta + 24) % 24;
+      const next = (hour + delta + 24) % 24;
+      if (next < minHour) return;
+      hour = next;
+      if (hour === minHour && minute < minMinute) { minute = minMinute; }
       const el = document.getElementById('hDisp');
       el.textContent = String(hour).padStart(2,'0');
       bump(el);
+      const em = document.getElementById('mDisp');
+      em.textContent = String(minute).padStart(2,'0');
     } else {
-      minute = (minute + delta + 60) % 60;
+      const next = (minute + delta + 60) % 60;
+      if (hour === minHour && next < minMinute && delta < 0) return;
+      minute = next;
       const el = document.getElementById('mDisp');
       el.textContent = String(minute).padStart(2,'0');
       bump(el);
