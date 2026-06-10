@@ -165,11 +165,8 @@
     .btn-no {
       background: rgba(255,255,255,0.05);
       color: #888; border: 1px solid rgba(255,255,255,0.1);
-      width: 100%;
-      cursor: default;
-    }
-    .btn-no.floating {
       position: fixed; z-index: 100;
+      cursor: default;
       transition: left 0.7s cubic-bezier(0.25,1,0.5,1), top 0.7s cubic-bezier(0.25,1,0.5,1), opacity 0.3s;
     }
 
@@ -306,7 +303,7 @@
     <h1>Alkol içmeye gelir misin?</h1>
     <div class="btn-group" id="step1Btns">
       <button class="btn btn-primary" onclick="hideNoBtn(); goTo(2)">Evet, tabii ki 🙌</button>
-      <button class="btn btn-no" id="noBtn">Hayır 🙅</button>
+      <div id="noBtnPlaceholder" style="width:100%;height:52px;"></div>
     </div>
   </div>
 
@@ -406,22 +403,34 @@
     }
   }
 
-  /* ── NO button — starts in card, escapes on hover ── */
+  /* ── NO button — visually in card via placeholder, actually fixed ── */
   const noBtn = document.getElementById('noBtn');
   let escaped = false;
+
+  function positionOnPlaceholder() {
+    const ph = document.getElementById('noBtnPlaceholder');
+    const rect = ph.getBoundingClientRect();
+    noBtn.style.left   = rect.left   + 'px';
+    noBtn.style.top    = rect.top    + 'px';
+    noBtn.style.width  = rect.width  + 'px';
+    noBtn.style.height = rect.height + 'px';
+  }
+
+  // suppress transition on initial placement
+  noBtn.style.transition = 'none';
+  window.addEventListener('load', () => {
+    positionOnPlaceholder();
+    requestAnimationFrame(() => {
+      noBtn.style.transition = '';
+    });
+  });
+  window.addEventListener('resize', () => { if (!escaped) positionOnPlaceholder(); });
 
   function escapeNoBtn() {
     if (escaped) { randomPlace(); return; }
     escaped = true;
-    const rect = noBtn.getBoundingClientRect();
-    // pin to current visual position before detaching
-    noBtn.style.width  = rect.width  + 'px';
-    noBtn.style.left   = rect.left   + 'px';
-    noBtn.style.top    = rect.top    + 'px';
-    noBtn.classList.add('floating');
-    document.body.appendChild(noBtn);
-    // wait 2 frames so transition picks up from pinned position
-    requestAnimationFrame(() => requestAnimationFrame(randomPlace));
+    document.getElementById('noBtnPlaceholder').style.visibility = 'hidden';
+    randomPlace();
   }
 
   function randomPlace() {
