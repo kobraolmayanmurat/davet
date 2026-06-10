@@ -388,6 +388,7 @@
 
   /* ── Navigation ── */
   function goTo(n) {
+    if (n > 1) hideNoBtn();
     const cur = document.getElementById('step' + currentStep);
     cur.classList.add('exit');
     setTimeout(() => {
@@ -454,7 +455,11 @@
     goTo(3);
   }
 
-  function hideNoBtn() { noBtn.style.display = 'none'; }
+  function hideNoBtn() {
+    noBtn.style.opacity = '0';
+    noBtn.style.pointerEvents = 'none';
+    setTimeout(() => { noBtn.style.display = 'none'; }, 300);
+  }
 
   /* ── Step 3: Time ── */
   function changeTime(unit, delta) {
